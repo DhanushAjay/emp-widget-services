@@ -1,0 +1,72 @@
+CREATE TABLE `osi_widget` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for activities',
+  `name` varchar(30) NOT NULL,
+  `preferences` varchar(2048) DEFAULT NULL,
+  `action_uri` varchar(1024) DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT '1',
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated_by` int(11) NOT NULL DEFAULT '1',
+  `last_updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `is_active` bit(1) DEFAULT b'1' COMMENT '(1)Yes,(0)No',
+  `service_uri` varchar(1024) DEFAULT NULL,
+  `version` bigint(8) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `osi_widget_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for activities',
+  `widget_id` int(11) NOT NULL COMMENT 'Widget id from osi_widget table',
+  `is_auto_refreshed` bit(1) DEFAULT b'1' COMMENT '(1)Yes,(0)No',
+  `is_movable` bit(1) DEFAULT b'1' COMMENT '(1)Yes,(0)No',
+  `is_closable` bit(1) DEFAULT b'1' COMMENT '(1)Yes,(0)No',
+  `is_minimizable` bit(1) DEFAULT b'1' COMMENT '(1)Yes,(0)No',
+  `is_maximizable` bit(1) DEFAULT b'1' COMMENT '(1)Yes,(0)No',
+  `is_resizable` bit(1) DEFAULT b'1' COMMENT '(1)Yes,(0)No',
+  `created_by` int(11) NOT NULL DEFAULT '1',
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated_by` int(11) NOT NULL DEFAULT '1',
+  `last_updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `version` bigint(8) DEFAULT NULL,
+  `enable_settings` varchar(255) DEFAULT NULL,
+  `refresh_interval_sec` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `OSI_WIDGET_F1` (`widget_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `osi_emp_widget` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for activities',
+  `widget_id` int(11) DEFAULT NULL,
+  `emp_id` int(11) NOT NULL COMMENT 'Employee id from osi_employee table',
+  `widget_col` int(11) DEFAULT NULL,
+  `seq_num` int(11) DEFAULT NULL,
+  `thumbnail_uri` varchar(255) DEFAULT NULL,
+  `is_visible` bit(1) DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT '1',
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated_by` int(11) NOT NULL DEFAULT '1',
+  `last_updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `version` bigint(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `osi_emp_widget_fk` (`widget_id`),
+  CONSTRAINT `osi_emp_widget_fk` FOREIGN KEY (`widget_id`) REFERENCES `osi_widget` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `osi_emp_dashboard` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID for activities',
+  `widget_id` int(11) DEFAULT NULL,
+  `emp_id` int(11) NOT NULL COMMENT 'Employee id from osi_employee table',
+  `dashboard_name` varchar(30) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `dashbard_desc` varchar(255) DEFAULT NULL,
+  `filters` varchar(2048) DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT '1',
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated_by` int(11) NOT NULL DEFAULT '1',
+  `last_updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `version` bigint(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `OSI_EMPLOYEE_DASHBOARD_F1` (`emp_id`),
+  KEY `osi_emp_dashboard_fk` (`widget_id`),
+  CONSTRAINT `osi_emp_dashboard_fk` FOREIGN KEY (`widget_id`) REFERENCES `osi_widget` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1
